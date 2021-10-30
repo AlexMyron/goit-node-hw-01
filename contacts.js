@@ -2,7 +2,7 @@ const uniqid = require("uniqid");
 const fs = require("fs").promises;
 const path = require("path");
 
-const contactsPath = path.normalize("./db/contacts.json");
+const contactsPath = path.resolve("./db/contacts.json");
 
 // TODO: Gets contacts as a json file
 async function listContacts() {
@@ -19,8 +19,7 @@ async function parsedContacts() {
 async function getContactById(contactId) {
   const contacts = await parsedContacts();
 
-  const result = contacts.find(({ id }) => id === Number(contactId));
-  return result;
+  return contacts.find(({ id }) => id === Number(contactId));
 }
 
 // TODO: Removes contact by id
@@ -31,10 +30,9 @@ async function removeContact(dataId) {
   const updatedContacts = contacts.filter(({ id }) => id !== contactId);
   const data = JSON.stringify(updatedContacts);
 
-  fs.writeFile("./db/contacts.json", data);
+  fs.writeFile(contactsPath, data);
 
-  const contact = contacts.find(({ id }) => id === contactId);
-  return contact;
+  return contacts.find(({ id }) => id === contactId);
 }
 
 // TODO: Adds contact by id

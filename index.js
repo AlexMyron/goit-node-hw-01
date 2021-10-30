@@ -1,7 +1,7 @@
 const express = require("express");
-const contactsAPI = require("./contacts");
 const { Command } = require("commander");
 const process = require("process");
+const contactsAPI = require("./contacts");
 
 const PORT = 8081;
 const app = express();
@@ -20,7 +20,7 @@ app.get(`/:userid`, async (req, res) => {
   if (!contact) {
     res.sendStatus(404);
   }
-  res.send(contact);
+  res.status(200).send(contact);
 });
 
 app.delete("/:userid", async (req, res) => {
