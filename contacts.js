@@ -19,20 +19,19 @@ async function parsedContacts() {
 async function getContactById(contactId) {
   const contacts = await parsedContacts();
 
-  return contacts.find(({ id }) => id === Number(contactId));
+  return contacts.find(({ id }) => String(id) === String(contactId));
 }
 
 // TODO: Removes contact by id
-async function removeContact(dataId) {
-  const contactId = Number(dataId);
+async function removeContact(id) {
   const contacts = await parsedContacts();
 
-  const updatedContacts = contacts.filter(({ id }) => id !== contactId);
-  const data = JSON.stringify(updatedContacts);
+  const idx = contacts.findIndex((el) => String(el.id) === String(id));
+  if (idx === -1) return null;
 
-  fs.writeFile(contactsPath, data);
-
-  return contacts.find(({ id }) => id === contactId);
+  const removedContact = contacts.splice(idx, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  return removedContact;
 }
 
 // TODO: Adds contact by id
@@ -42,7 +41,7 @@ async function addContact(contactData) {
 
   contacts = [...contacts, ...contactData];
   const data = JSON.stringify(contacts);
-  await fs.writeFile("./db/contacts.json", data);
+  await fs.writeFile(contactsPath, data);
   return contactData;
 }
 
